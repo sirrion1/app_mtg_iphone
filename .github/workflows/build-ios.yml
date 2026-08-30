@@ -1,0 +1,61 @@
+name: Compilar MTGInventario (iOS, sin firmar)
+
+# Se lanza a mano desde la pestaña "Actions" de GitHub, o automáticamente
+# al hacer push a main. Así puedes pedirme que corrija un error, subir el
+# cambio, y volver a lanzarlo sin tocar nada más.
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: macos-15
+
+    steps:
+      - name: Descargar el código del repositorio
+        uses: actions/checkout@v4
+
+      - name: Mostrar versión de Xcode disponible
+        run: xcodebuild -version
+
+      # XcodeGen viene preinstalado en los runners macOS de GitHub; convierte
+      # project.yml en un MTGInventario.xcodeproj de verdad. Es el paso que
+      # sustituye a "abrir Xcode y crear el proyecto a mano".
+      - name: Generar el proyecto Xcode a partir de project.yml
+        run: xcodegen generate
+
+      - name: Compilar para iPhone (sin firma de código)
+        run: |
+          xcodebuild build \
+            -project MTGInventario.xcodeproj \
+            -scheme MTGInventario \
+            -configuration Release \
+            -sdk iphoneos \
+            -destination "generic/platform=iOS" \
+            -derivedDataPath build \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY="" \
+            DEVELOPMENT_TEAM="" \
+            | xcpretty || true
+
+      - name: Empaquetar como .ipa sin firmar
+        run: |
+          set -e
+          APP_PATH="build/Build/Products/Release-iphoneos/MTGInventario.app"
+          if [ ! -d "$APP_PATH" ]; then
+            echo "No se generó MTGInventario.app -- revisa el log de 'Compilar para iPhone' arriba, ahí está el error real."
+            exit 1
+          fi
+          mkdir -p Payload
+          cp -r "$APP_PATH" Payload/
+          zip -r MTGInventario-sin-firmar.ipa Payload
+          echo "IPA creado correctamente."
+
+      - name: Subir el .ipa como artefacto descargable
+        uses: actions/upload-artifact@v4
+        with:
+          name: MTGInventario-sin-firmar
+          path: MTGInventario-sin-firmar.ipa
+          retention-days: 14
