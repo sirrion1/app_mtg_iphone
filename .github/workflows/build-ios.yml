@@ -1,8 +1,5 @@
 name: Compilar MTGInventario (iOS, sin firmar)
 
-# Se lanza a mano desde la pestaña "Actions" de GitHub, o automáticamente
-# al hacer push a main. Así puedes pedirme que corrija un error, subir el
-# cambio, y volver a lanzarlo sin tocar nada más.
 on:
   workflow_dispatch:
   push:
@@ -19,9 +16,11 @@ jobs:
       - name: Mostrar versión de Xcode disponible
         run: xcodebuild -version
 
-      # XcodeGen viene preinstalado en los runners macOS de GitHub; convierte
-      # project.yml en un MTGInventario.xcodeproj de verdad. Es el paso que
-      # sustituye a "abrir Xcode y crear el proyecto a mano".
+      - name: Instalar XcodeGen y xcpretty
+        run: |
+          brew install xcodegen
+          gem install xcpretty
+
       - name: Generar el proyecto Xcode a partir de project.yml
         run: xcodegen generate
 
