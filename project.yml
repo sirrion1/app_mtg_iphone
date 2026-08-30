@@ -1,0 +1,38 @@
+name: MTGInventario
+options:
+  bundleIdPrefix: com.mtginventario
+  deploymentTarget:
+    iOS: "16.0"
+
+targets:
+  MTGInventario:
+    type: application
+    platform: iOS
+    sources:
+      - MTGInventario
+    info:
+      path: MTGInventario/Info.plist
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.mtginventario.app
+        SWIFT_VERSION: "5.0"
+        TARGETED_DEVICE_FAMILY: "1"
+        GENERATE_INFOPLIST_FILE: NO
+        # Firma desactivada aquí a propósito: en GitHub Actions compilamos
+        # SIN firmar. La firma real (con tu Apple ID) se hace después, en
+        # tu PC, con Sideloadly (ver GUIA_GITHUB_ACTIONS.md).
+        CODE_SIGN_STYLE: Manual
+        CODE_SIGNING_REQUIRED: "NO"
+        CODE_SIGNING_ALLOWED: "NO"
+        CODE_SIGN_IDENTITY: ""
+        DEVELOPMENT_TEAM: ""
+
+schemes:
+  MTGInventario:
+    build:
+      targets:
+        MTGInventario: all
+    run:
+      config: Debug
+    archive:
+      config: Release

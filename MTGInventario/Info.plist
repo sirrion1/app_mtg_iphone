@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>es</string>
+	<key>CFBundleDisplayName</key>
+	<string>MTGInventario</string>
+	<key>CFBundleExecutable</key>
+	<string>$(EXECUTABLE_NAME)</string>
+	<key>CFBundleIdentifier</key>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>$(PRODUCT_NAME)</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.0</string>
+	<key>CFBundleVersion</key>
+	<string>1</string>
+	<key>LSRequiresIPhoneOS</key>
+	<true/>
+	<key>UILaunchScreen</key>
+	<dict/>
+	<key>UIRequiredDeviceCapabilities</key>
+	<array>
+		<string>armv7</string>
+	</array>
+	<key>UISupportedInterfaceOrientations</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+	</array>
+
+	<!-- Equivalente al permiso de cámara declarado en AndroidManifest.xml -->
+	<key>NSCameraUsageDescription</key>
+	<string>Necesitamos la cámara para escanear el nombre de tus cartas.</string>
+
+	<!-- Equivalente al permiso runtime ACCESS_LOCAL_NETWORK de Android
+	     16/17 (LocalNetworkPermission.kt): aquí no hay que pedirlo desde
+	     el código, basta con esta clave y iOS pregunta solo cuando la app
+	     llame de verdad a una IP de tu red local. -->
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>Necesitamos acceso a tu red local para hablar con tu servidor de inventario.</string>
+
+	<!-- Tu servidor habla por http:// (no https), así que hace falta esta
+	     excepción de App Transport Security para redes locales. -->
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsLocalNetworking</key>
+		<true/>
+	</dict>
+</dict>
+</plist>
